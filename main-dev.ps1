@@ -1,12 +1,11 @@
 $ErrorActionPreference = "Stop"
-$ProductName = "Evobis Customer PowerShell module";
-$ProductVersion = "1.0.0";
+$ProductName = "Evobis Customer PowerShell module - DEV";
+$ProductVersion = "0.0.1";
 
 Write-Host "👋 - Welcome to the $ProductName!`n" -ForegroundColor Cyan
 try {
     
     Write-host "⌛ - Loading $ProductName" -ForegroundColor Magenta
-
 
     $cmdlets = @(
         "Enable-EBModule",

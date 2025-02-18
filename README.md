@@ -1,10 +1,18 @@
-# Evobis PowerShell
+![Evobis logo](./assets/EVOBIS-Logo.png)
 
-A public facing PowerShell 7.x Framework to streamline collaboration with our clients. 
+# Evobis Customer PowerShell module
 
-These cmdlets aren't meant to be used for automations, but rather as a way to provide a consistent and easy to use interface for our clients to interact Microsoft Services.
+> [!NOTE]
+> This library is in preview, and is subject to change.
+
+This is a PowerShell library/module that is designed to aid [Evobis](https://evobis.dk) customers in managing their tenant.
+
+These cmdlets aren't meant to be used for automations, but rather as a way to provide a simple interface to the more complex tasks that are often needed when working with development across Microsoft 365, such as managing permissions that don't yet have a GUI provided by Microsoft.
 
 ## Installation/Getting started
+
+> [!IMPORTANT]
+> This module is designed to be run with PowerShell 7.x and above, and **WILL NOT** work with Windows PowerShell. 
 
 The solution isn't a "module" in the sense that you don't install it on your machine. Instead you just run it from the repository, when needed, and then it's only available in the current session.
 
@@ -18,7 +26,7 @@ You'll be prompted to sign in to the `Microsoft Graph Command Line Tools` applic
 
 If everything goes well, you should see the following, and you're ready to use the cmdlets:
 
-![image](./assets/signed-in.png)
+![A screenshot from a successful initialization of the library](./assets/signed-in.png)
 
 ## Cmdlets
 
@@ -36,9 +44,9 @@ Add-EBPermissionsToManagedIdentity -ManagedIdentityObjectId "b8ef0ce0-2e99-4950-
 
 #### Parameters
 
-- `-ManagedIdentityObjectId`: The object id of the managed identity.
-- `-SharePointScopes`: The SharePoint scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
-- `-GraphScopes`: The Graph scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
+- `-ManagedIdentityObjectId`: **Guid** The object id of the managed identity.
+- `-SharePointScopes`: **string\[\]** The SharePoint scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
+- `-GraphScopes`: **string\[\]** The Graph scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
 
 ### Add-EBSitesSelectedPermissionToSite
 
@@ -47,15 +55,34 @@ This cmdlet allows you to grant an application access to a single SharePoint sit
 #### Example
 
 ```powershell
-Add-EBSitesSelectedPermissionToSite -ClientId "b8ef0ce0-2e99-4950-8bfd-713fb0ce810a" -SiteUrl "https://evobisdev.sharepoint.com/sites/DTTest" -Permission read
+Add-EBSitesSelectedPermissionToSite -ClientId "<Guid>" -SiteUrl "https://<tenant>.sharepoint.com/sites/<site>" -Permission read
 ```
 
 #### Parameters
 
-- `-ClientId`/`-ObjectId`: The ClientId of the application, or the ObjectId of the managed identity.
-- `-SiteUrl`: The URL of the site to grant access to, without any trailing slashes.
-- `-Permission`: The permission to grant, this can be `read`, `write`
+- `-ClientId`/`-ObjectId`: **Guid** The ClientId of the application, or the ObjectId of the managed identity.
+- `-SiteUrl`: **string** The URL of the site to grant access to, without any trailing slashes.
+- `-Permission`: **string** The permission to grant, this can be `read`, `write`
+
+## Changes
+
+### 0.0.1
+
+This is the initial release of the module, and contains the following cmdlets:
+
+- `Add-EBPermissionsToManagedIdentity`
+- `Add-EBSitesSelectedPermissionToSite`
+
+More to come in the future.
+
+## Contributing
+
+Since this is a library intended for internal use, we don't expect any contributions, but if you find any issues, please report them to your consultant at [Evobis](https://evobis.dk/om-evobis/our-team/), or feel free to fork the repository, and provide a fix, we'll be happy to look over your contributions.
 
 ## Issues
 
 If you find any issues, please contact your consultant at [Evobis](https://evobis.dk/om-evobis/our-team/).
+
+## Contributors
+
+- [Dan Toft](https://dan.toft.dk)
