@@ -12,7 +12,9 @@ These cmdlets aren't meant to be used for automations, but rather as a way to pr
 ## Installation/Getting started
 
 > [!IMPORTANT]
-> This module is designed to be run with PowerShell 7.x and above, and **WILL NOT** work with Windows PowerShell. 
+> This module is designed to be run with PowerShell 7.x and above, and **WILL NOT** work with Windows PowerShell.
+> 
+> The latest version of PowerShell can be downloaded from [here](https://aka.ms/powershell-release?tag=stable).
 
 The solution isn't a "module" in the sense that you don't install it on your machine. Instead you just run it from the repository, when needed, and then it's only available in the current session.
 
