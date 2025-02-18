@@ -7,6 +7,7 @@ try {
     
     Write-host "⌛ - Loading $ProductName" -ForegroundColor Magenta
 
+
     $cmdlets = @(
         "Enable-EBModule",
         "Test-EBIsPowerShellCore",
@@ -18,9 +19,8 @@ try {
         "Add-EBSitesSelectedPermissionToSite"
     )
 
-    $rootUrl = "https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/src/"
     foreach ($cmdlet in $cmdlets) {
-        irm -Uri "$rootUrl$cmdlet.ps1" | iex
+        . $PSScriptRoot\src\$cmdlet.ps1
     }
 
     Write-Host "✅ - $ProductName is loaded`n" -ForegroundColor Green;
