@@ -14,6 +14,12 @@ To use it, simply run the following command in a PowerShell session:
 irm https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/main.ps1 | iex
 ```
 
+You'll be prompted to sign in to the `Microsoft Graph Command Line Tools` application, this is the backing of our cmdlets, and is used to authenticate and authorize the cmdlets, simply follow the instructions in the browser.
+
+If everything goes well, you should see the following, and you're ready to use the cmdlets:
+
+![image](./assets/signed-in.png)
+
 ## Cmdlets
 
 There are loads of service cmdlets available, those aren't intended to be used directly, but are instead called via the other cmdlets, the following are the ones intended for 'public usage'.
