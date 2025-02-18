@@ -16,7 +16,6 @@ function Enable-EBModule {
     if ($null -eq $module) {
         Write-Host "⚠️ - '$ModuleName' PowerShell Module not found, installing it now" -ForegroundColor Yellow
         Install-Module -Name $ModuleName -Force -AllowClobber -Scope CurrentUser
-        Import-Module $ModuleName
         Write-Host "✅ - '$ModuleName' PowerShell Module has been installed" -ForegroundColor Green
     }
     else {
