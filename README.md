@@ -11,7 +11,7 @@ The solution isn't a "module" in the sense that you don't install it on your mac
 To use it, simply run the following command in a PowerShell session:
 
 ```powershell
-irm https://github.com/Evobis-ApS/PowerShell/raw/refs/heads/main/main.ps1 | iex
+irm https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/main.ps1 | iex
 ```
 
 # Issues
