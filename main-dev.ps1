@@ -5,6 +5,10 @@ $ProductVersion = "0.0.1";
 Write-Host "👋 - Welcome to the $ProductName!`n" -ForegroundColor Cyan
 try {
     
+    if ($PSVersionTable.PSVersion.Major -lt 7) {
+        throw "❌ - This module requires PowerShell 7 or higher to run, please upgrade your PowerShell version and try again - https://aka.ms/powershell-release?tag=stable"
+    }
+
     Write-host "⌛ - Loading $ProductName" -ForegroundColor Magenta
 
     $cmdlets = @(
