@@ -25,8 +25,8 @@ try {
 
     Write-Host "✅ - $ProductName is loaded`n" -ForegroundColor Green;
     Write-Host "👷 - Checking prerequisites" -ForegroundColor Magenta;
-    Test-IsPowerShellCore;
-    Enable-Module -ModuleName "Microsoft.Graph";
+    Test-EBIsPowerShellCore;
+    Enable-EBModule -ModuleName "Microsoft.Graph";
 
     Write-Host "✅ - Prerequisites are met`n" -ForegroundColor Green;
     Write-Host "🚀 - Connecting to Microsoft Graph" -ForegroundColor Magenta;
