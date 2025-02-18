@@ -23,7 +23,7 @@ Instead you just run it from the repository, when needed, and then it's only ava
 To use it, simply run the following command in a PowerShell session:
 
 ```powershell
-irm https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/main.ps1 | iex
+irm "https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/main.ps1" | iex
 ```
 
 You'll be prompted to sign in with your **Admin account**.
