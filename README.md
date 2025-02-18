@@ -38,46 +38,17 @@ Once all of that has been completed, you should see the following:
 
 ![A screenshot from a successful initialization of the library](./assets/Success.png)
 
-
 If everything goes well, you should see the following, and you're ready to use the cmdlets:
-
-
 
 ## Cmdlets
 
 There are loads of service cmdlets available, those aren't intended to be used directly, but are instead called via the other cmdlets, the following are the ones intended for 'public usage'.
 
-### Add-EBPermissionsToManagedIdentity
+### Add Cmdlets
 
-This cmdlet is used to add permissions to a managed identity.
+#### [Add-EBPermissionsToManagedIdentity](docs/Add-EBPermissionsToManagedIdentity.md)
 
-#### Example
-
-```powershell
-Add-EBPermissionsToManagedIdentity -ManagedIdentityObjectId "b8ef0ce0-2e99-4950-8bfd-713fb0ce810a" -SharePointScopes Sites.FullControl.All -GraphScopes Directory.Read.All, Mail.Send
-```
-
-#### Parameters
-
-- `-ManagedIdentityObjectId`: **Guid** The object id of the managed identity.
-- `-SharePointScopes`: **string\[\]** The SharePoint scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
-- `-GraphScopes`: **string\[\]** The Graph scopes to add, these support autocomplete of the possible scopes, and allow multiple, simply by separating them with a `,`.
-
-### Add-EBSitesSelectedPermissionToSite
-
-This cmdlet allows you to grant an application access to a single SharePoint site, this is useful when you want to grant access to a site, rather than using the all mighty `Sites.FullControl.All`, but instead the `Sites.Selected`.
-
-#### Example
-
-```powershell
-Add-EBSitesSelectedPermissionToSite -ClientId "<Guid>" -SiteUrl "https://<tenant>.sharepoint.com/sites/<site>" -Permission read
-```
-
-#### Parameters
-
-- `-ClientId`/`-ObjectId`: **Guid** The ClientId of the application, or the ObjectId of the managed identity.
-- `-SiteUrl`: **string** The URL of the site to grant access to, without any trailing slashes.
-- `-Permission`: **string** The permission to grant, this can be `read`, `write`
+#### [Add-EBSitesSelectedPermissionToSite](docs/Add-EBSitesSelectedPermissionToSite.md)
 
 ## Changes
 
