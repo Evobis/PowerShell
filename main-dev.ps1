@@ -19,7 +19,8 @@ try {
     )
 
     foreach ($cmdlet in $cmdlets) {
-        . $PSScriptRoot\src\$cmdlet.ps1
+        Write-Host "🔍 - Loading $cmdlet" -ForegroundColor Magenta;
+        . "$PSScriptRoot\src\$cmdlet.ps1"
     }
 
     Write-Host "✅ - $ProductName is loaded`n" -ForegroundColor Green;

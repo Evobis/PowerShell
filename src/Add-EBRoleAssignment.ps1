@@ -10,7 +10,7 @@
 function Add-EBRoleAssignment {
     param(
         [Parameter(Position = 0, mandatory = $true)]
-        [Microsoft.Graph.PowerShell.Models.MicrosoftGraphServicePrincipal]$ServicePrincipal,
+        [PSCustomObject]$ServicePrincipal,
 
         [Parameter(Position = 1, mandatory = $true)]
         [string]$ManagedIdentityObjectId,

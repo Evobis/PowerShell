@@ -18,9 +18,10 @@ try {
         "Add-EBSitesSelectedPermissionToSite"
     )
 
-    $rootUrl = "https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/src/"
+    $rootUrl = "https://raw.githubusercontent.com/Evobis-ApS/PowerShell/refs/heads/main/src"
     foreach ($cmdlet in $cmdlets) {
-        irm -Uri "$rootUrl$cmdlet.ps1" | iex
+        Write-Host "🔍 - Loading $cmdlet" -ForegroundColor Magenta;
+        irm -Uri "$rootUrl/$cmdlet.ps1" | iex
     }
 
     Write-Host "✅ - $ProductName is loaded`n" -ForegroundColor Green;
