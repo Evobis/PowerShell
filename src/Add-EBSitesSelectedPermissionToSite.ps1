@@ -15,7 +15,7 @@ function Add-EBSitesSelectedPermissionToSite {
     )
 
     $SiteId = Get-EBSharePointSiteIdByUrl -SiteUrl $SiteUrl
-    New-MgSitePermission -SiteId $SiteId -Roles @($roles) -GrantedTo @{Application = @{Id = $ObjectId; DisplayName = $ObjectId } } | Out-Null
+    New-MgSitePermission -SiteId $SiteId -Roles @($roles) -GrantedTo @{Application = @{Id = $ApplicationId; DisplayName = $ApplicationId } } | Out-Null
 
-    Write-Host "✅ - Permission $Permission granted to $ObjectId on $SiteUrl" -ForegroundColor Green
+    Write-Host "✅ - Permission $Permission granted to $ApplicationId on $SiteUrl" -ForegroundColor Green
 }
