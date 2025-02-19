@@ -4,7 +4,7 @@ function Add-EBSitesSelectedPermissionToSite {
     param (
         [Alias("ClientId")]
         [Parameter(Position = 0, mandatory = $true)]
-        [string]$ObjectId,
+        [string]$ApplicationId,
 
         [Parameter(Position = 1, mandatory = $true)]    
         [string]$SiteUrl,
