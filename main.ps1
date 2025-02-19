@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 $ProductName = "Evobis Customer PowerShell module";
-$ProductVersion = "0.0.1";
+$ProductVersion = "0.0.2";
 
 Write-Host "👋 - Welcome to the $ProductName!`n" -ForegroundColor Cyan
 try {

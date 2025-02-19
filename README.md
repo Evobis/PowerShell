@@ -52,6 +52,10 @@ There are loads of service cmdlets available, those aren't intended to be used d
 
 ## Changes
 
+### 0.0.2
+
+Renamed the parameter `ObjectId` to `ApplicationId` in the `Add-EBSitesSelectedPermissionToSite` cmdlet.
+
 ### 0.0.1
 
 This is the initial release of the module, and contains the following cmdlets:
