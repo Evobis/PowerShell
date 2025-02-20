@@ -10,11 +10,12 @@ This is a PowerShell library/module that is designed to aid [Evobis](https://evo
 These cmdlets aren't meant to be used for automations, but rather as a way to provide a simple interface to the more complex tasks that are often needed when working with development across Microsoft 365, such as managing permissions that don't yet have a GUI provided by Microsoft.
 
 ## Getting started
-Read the [Getting Started](docs/Getting_Started.md) guide to get started with the library.
+
+Read the [getting Started](docs/Getting_Started.md) guide to get started with the library.
 
 ### TL;DR
 
-To use it, simply run the following command in a PowerShell **7.x**+ session:
+Simply run the following command in a PowerShell **7.X**+ session:
 
 ```powershell
 irm "https://raw.githubusercontent.com/Evobis/PowerShell/refs/heads/main/main.ps1" | iex
