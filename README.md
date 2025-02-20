@@ -11,7 +11,7 @@ These cmdlets aren't meant to be used for automations, but rather as a way to pr
 
 ## Getting started
 
-Read the [getting Started](docs/Getting_Started.md) guide to get started with the library.
+Read the [getting started](docs/Getting_Started.md) guide to get started with the library.
 
 ### TL;DR
 
