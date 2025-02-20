@@ -50,7 +50,7 @@ There are loads of service cmdlets available, those aren't intended to be used d
 
 #### [Add-EBSitesSelectedPermissionToSite](docs/Add-EBSitesSelectedPermissionToSite.md)
 
-### Changelog
+## Changelog
 
 Please review the [changelog](./CHANGELOG.md) for release details on all library changes.
 
