@@ -15,19 +15,29 @@ function Add-EBPermissionsToManagedIdentity {
         [string]$ManagedIdentityObjectId,
 
         [Parameter()]    
+        [Alias("SharePointScopesApplication")]
         [ValidateSet([SharePoint])]
         [string[]]$SharePointScopes,
     
         [Parameter()]    
+        [Alias("GraphScopesApplication")]
         [ValidateSet([Graph])]
-        [string[]]$GraphScopes
+        [string[]]$GraphScopes,
+
+        [Parameter()]    
+        [ValidateSet([SharePoint])]
+        [string[]]$SharePointScopesDelegated,
+    
+        [Parameter()]    
+        [ValidateSet([Graph])]
+        [string[]]$GraphScopesDelegated
     )
 
 
 
     Write-Host "Adding permissions to Managed Identity '$ManagedIdentityObjectId'"
     
-    if ($GraphScopes.Length -eq 0 -and $SharePointScopes.Length -eq 0) {
+    if ($GraphScopes.Length -eq 0 -and $SharePointScopes.Length -eq 0 -and $GraphScopesDelegated.Length -eq 0 -and $SharePointScopesDelegated.Length -eq 0) {
         throw "No scopes provided";
     }
 
@@ -46,15 +56,42 @@ function Add-EBPermissionsToManagedIdentity {
         }
     }
 
+    if ($GraphScopesDelegated.Length -gt 0) {
+        $graphServicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq 'Microsoft Graph'" -Property Id, AppRoles
+        foreach ($roleAssignment in $GraphScopesDelegated) {
+            Add-EBRoleAssignment -ServicePrincipal $graphServicePrincipal -ManagedIdentityObjectId $ManagedIdentityObjectId -RoleAssignment $roleAssignment -Delegated
+        }
+    }
+
+    if ($SharePointScopesDelegated.Length -gt 0) {
+        $sharePointServicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq 'Office 365 SharePoint Online'" -Property Id, AppRoles
+        foreach ($roleAssignment in $SharePointScopesDelegated) {
+            Add-EBRoleAssignment -ServicePrincipal $sharePointServicePrincipal -ManagedIdentityObjectId $ManagedIdentityObjectId -RoleAssignment $roleAssignment -Delegated
+        }
+    }
+    
     Write-Host "`nListing all assignments for $ManagedIdentityObjectId`n"
-    $allAssignments = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId | Group-Object -Property ResourceDisplayName
-    foreach ($group in $allAssignments) {
+    
+    Write-Host "`nApplication"
+    $allAssignmentsApp = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId | Group-Object -Property ResourceDisplayName
+    foreach ($group in $allAssignmentsApp) {
         Write-Host "> $($group.Name)"
         foreach ($assignment in $group.Group) {
             $appRole = get-mgserviceprincipal -ServicePrincipalId $assignment.ResourceId | select -ExpandProperty AppRoles | Where-Object Id -eq $assignment.AppRoleId
             Write-Host "`t> $($appRole.Value)"
         }
     }
+
+    Write-Host "`nDelegated"
+    $allDelegatedassignments = Get-MgOauth2PermissionGrant -Filter "clientId eq '$ManagedIdentityObjectId' and consentType eq 'AllPrincipals'" 
+    foreach ($group in $allDelegatedassignments) {
+        $principal = Get-MgServicePrincipal -ServicePrincipalId $group.ResourceId
+        Write-Host "> $($principal.DisplayName)"
+        foreach ($assignment in $allDelegatedassignments.Scope -split " ") {
+            Write-Host "`t> $($assignment)"
+        }
+    }
+
     Write-Host "`nFinished adding permissions to Managed Identity '$ManagedIdentityObjectId'"
 
 }
