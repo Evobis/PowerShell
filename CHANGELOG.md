@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.0.3 - 2025-Jul-28
+
+Updated `Add-EBPermissionsToManagedIdentity` to support delegated permissions for managed identities
+
 ## 0.0.2 - 2025-Feb-19
 
 Renamed the parameter `ObjectId` to `ApplicationId` in the `Add-EBSitesSelectedPermissionToSite` cmdlet.
