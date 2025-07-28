@@ -40,3 +40,4 @@ If you find any issues, please contact your consultant at [Evobis](https://evobi
 ## Contributors
 
 - [Dan Toft](https://dan-toft.dk)
+- [Steffen Andersen](mailto:sa@evobis.dk)
