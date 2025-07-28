@@ -15,19 +15,29 @@ function Add-EBPermissionsToManagedIdentity {
         [string]$ManagedIdentityObjectId,
 
         [Parameter()]    
+        [Alias("SharePointScopesApplication")]
         [ValidateSet([SharePoint])]
         [string[]]$SharePointScopes,
     
         [Parameter()]    
+        [Alias("GraphScopesApplication")]
         [ValidateSet([Graph])]
-        [string[]]$GraphScopes
+        [string[]]$GraphScopes,
+
+        [Parameter()]    
+        [ValidateSet([SharePoint])]
+        [string[]]$SharePointScopesDelegated,
+    
+        [Parameter()]    
+        [ValidateSet([Graph])]
+        [string[]]$GraphScopesDelegated
     )
 
 
 
     Write-Host "Adding permissions to Managed Identity '$ManagedIdentityObjectId'"
     
-    if ($GraphScopes.Length -eq 0 -and $SharePointScopes.Length -eq 0) {
+    if ($GraphScopes.Length -eq 0 -and $SharePointScopes.Length -eq 0 -and $GraphScopesDelegated.Length -eq 0 -and $SharePointScopesDelegated.Length -eq 0) {
         throw "No scopes provided";
     }
 
@@ -46,15 +56,42 @@ function Add-EBPermissionsToManagedIdentity {
         }
     }
 
+    if ($GraphScopesDelegated.Length -gt 0) {
+        $graphServicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq 'Microsoft Graph'" -Property Id, AppRoles
+        foreach ($roleAssignment in $GraphScopesDelegated) {
+            Add-EBRoleAssignment -ServicePrincipal $graphServicePrincipal -ManagedIdentityObjectId $ManagedIdentityObjectId -RoleAssignment $roleAssignment -Delegated
+        }
+    }
+
+    if ($SharePointScopesDelegated.Length -gt 0) {
+        $sharePointServicePrincipal = Get-MgServicePrincipal -Filter "DisplayName eq 'Office 365 SharePoint Online'" -Property Id, AppRoles
+        foreach ($roleAssignment in $SharePointScopesDelegated) {
+            Add-EBRoleAssignment -ServicePrincipal $sharePointServicePrincipal -ManagedIdentityObjectId $ManagedIdentityObjectId -RoleAssignment $roleAssignment -Delegated
+        }
+    }
+    
     Write-Host "`nListing all assignments for $ManagedIdentityObjectId`n"
-    $allAssignments = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId | Group-Object -Property ResourceDisplayName
-    foreach ($group in $allAssignments) {
+    
+    Write-Host "`nApplication"
+    $allAssignmentsApp = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ManagedIdentityObjectId | Group-Object -Property ResourceDisplayName
+    foreach ($group in $allAssignmentsApp) {
         Write-Host "> $($group.Name)"
         foreach ($assignment in $group.Group) {
             $appRole = get-mgserviceprincipal -ServicePrincipalId $assignment.ResourceId | select -ExpandProperty AppRoles | Where-Object Id -eq $assignment.AppRoleId
             Write-Host "`t> $($appRole.Value)"
         }
     }
+
+    Write-Host "`nDelegated"
+    $allDelegatedassignments = Get-MgOauth2PermissionGrant -Filter "clientId eq '$ManagedIdentityObjectId' and consentType eq 'AllPrincipals'" 
+    foreach ($group in $allDelegatedassignments) {
+        $principal = Get-MgServicePrincipal -ServicePrincipalId $group.ResourceId
+        Write-Host "> $($principal.DisplayName)"
+        foreach ($assignment in $allDelegatedassignments.Scope -split " ") {
+            Write-Host "`t> $($assignment)"
+        }
+    }
+
     Write-Host "`nFinished adding permissions to Managed Identity '$ManagedIdentityObjectId'"
 
 }
@@ -68,6 +105,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "Acronym.Read.All"
             "AdministrativeUnit.Read.All"
             "AdministrativeUnit.ReadWrite.All"
+            "AgentApplication.Create"
+            "AgentIdentity.Create"
             "Agreement.Read.All"
             "Agreement.ReadWrite.All"
             "AgreementAcceptance.Read.All"
@@ -85,6 +124,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "ApprovalSolution.ReadWrite.All"
             "AttackSimulation.Read.All"
             "AttackSimulation.ReadWrite.All"
+            "AuditActivity.Read"
+            "AuditActivity.Write"
             "AuditLog.Read.All"
             "AuditLogsQuery-CRM.Read.All"
             "AuditLogsQuery-Endpoint.Read.All"
@@ -160,10 +201,16 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "CloudPC.ReadWrite.All"
             "Community.Read.All"
             "Community.ReadWrite.All"
+            "ConfigurationMonitoring.Read.All"
+            "ConfigurationMonitoring.ReadWrite.All"
             "ConsentRequest.Read.All"
             "ConsentRequest.ReadWrite.All"
             "Contacts.Read"
             "Contacts.ReadWrite"
+            "Content.Process.All"
+            "Content.Process.User"
+            "ContentActivity.Read"
+            "ContentActivity.Write"
             "CrossTenantInformation.ReadBasic.All"
             "CrossTenantUserProfileSharing.Read.All"
             "CrossTenantUserProfileSharing.ReadWrite.All"
@@ -211,6 +258,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "Directory.ReadWrite.All"
             "DirectoryRecommendations.Read.All"
             "DirectoryRecommendations.ReadWrite.All"
+            "Domain-InternalFederation.Read.All"
+            "Domain-InternalFederation.ReadWrite.All"
             "Domain.Read.All"
             "Domain.ReadWrite.All"
             "eDiscovery.Read.All"
@@ -230,6 +279,10 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "EduRoster.Read.All"
             "EduRoster.ReadBasic.All"
             "EduRoster.ReadWrite.All"
+            "EngagementConversation.Migration.All"
+            "EngagementMeetingConversation.Read.All"
+            "EngagementRole.Read.All"
+            "EngagementRole.ReadWrite.All"
             "EntitlementManagement.Read.All"
             "EntitlementManagement.ReadWrite.All"
             "EventListener.Read.All"
@@ -256,6 +309,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "Group.ReadWrite.All"
             "GroupMember.Read.All"
             "GroupMember.ReadWrite.All"
+            "GroupSettings.Read.All"
+            "GroupSettings.ReadWrite.All"
             "HealthMonitoringAlert.Read.All"
             "HealthMonitoringAlert.ReadWrite.All"
             "HealthMonitoringAlertConfig.Read.All"
@@ -374,6 +429,7 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "PlaceDevice.ReadWrite.All"
             "PlaceDeviceTelemetry.ReadWrite.All"
             "Policy.Read.All"
+            "Policy.Read.AuthenticationMethod"
             "Policy.Read.ConditionalAccess"
             "Policy.Read.DeviceConfiguration"
             "Policy.Read.IdentityProtection"
@@ -386,6 +442,7 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "Policy.ReadWrite.ConditionalAccess"
             "Policy.ReadWrite.ConsentRequest"
             "Policy.ReadWrite.CrossTenantAccess"
+            "Policy.ReadWrite.CrossTenantCapability"
             "Policy.ReadWrite.DeviceConfiguration"
             "Policy.ReadWrite.ExternalIdentities"
             "Policy.ReadWrite.FeatureRollout"
@@ -421,6 +478,9 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "ProfilePhoto.ReadWrite.All"
             "ProgramControl.Read.All"
             "ProgramControl.ReadWrite.All"
+            "ProtectionScopes.Compute.All"
+            "ProtectionScopes.Compute.User"
+            "ProvisioningLog.Read.All"
             "PublicKeyInfrastructure.Read.All"
             "PublicKeyInfrastructure.ReadWrite.All"
             "QnA.Read.All"
@@ -469,6 +529,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "SecurityAnalyzedMessage.ReadWrite.All"
             "SecurityEvents.Read.All"
             "SecurityEvents.ReadWrite.All"
+            "SecurityIdentitiesAccount.Read.All"
+            "SecurityIdentitiesActions.ReadWrite.All"
             "SecurityIdentitiesHealth.Read.All"
             "SecurityIdentitiesHealth.ReadWrite.All"
             "SecurityIdentitiesSensors.Read.All"
@@ -477,6 +539,10 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "SecurityIdentitiesUserActions.ReadWrite.All"
             "SecurityIncident.Read.All"
             "SecurityIncident.ReadWrite.All"
+            "SensitivityLabel.Evaluate"
+            "SensitivityLabel.Evaluate.All"
+            "SensitivityLabel.Read"
+            "SensitivityLabels.Read.All"
             "ServiceActivity-Exchange.Read.All"
             "ServiceActivity-Microsoft365Web.Read.All"
             "ServiceActivity-OneDrive.Read.All"
@@ -489,6 +555,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "SharePointTenantSettings.ReadWrite.All"
             "ShortNotes.Read.All"
             "ShortNotes.ReadWrite.All"
+            "SignInIdentifier.Read.All"
+            "SignInIdentifier.ReadWrite.All"
             "Sites.Archive.All"
             "Sites.FullControl.All"
             "Sites.Manage.All"
@@ -497,6 +565,7 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "Sites.Selected"
             "SpiffeTrustDomain.Read.All"
             "SpiffeTrustDomain.ReadWrite.All"
+            "Storyline.ReadWrite.All"
             "SubjectRightsRequest.Read.All"
             "SubjectRightsRequest.ReadWrite.All"
             "Synchronization.Read.All"
@@ -550,6 +619,8 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "TeamsTab.ReadWriteSelfForChat.All"
             "TeamsTab.ReadWriteSelfForTeam.All"
             "TeamsTab.ReadWriteSelfForUser.All"
+            "TeamsTelephoneNumber.Read.All"
+            "TeamsTelephoneNumber.ReadWrite.All"
             "TeamsUserConfiguration.Read.All"
             "TeamTemplates.Read.All"
             "Teamwork.Migrate.All"
@@ -586,6 +657,7 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "User.Read.All"
             "User.ReadBasic.All"
             "User.ReadWrite.All"
+            "User.ReadWrite.CrossCloud"
             "User.RevokeSessions.All"
             "UserAuthenticationMethod.Read.All"
             "UserAuthenticationMethod.ReadWrite.All"
@@ -601,6 +673,7 @@ class Graph : System.Management.Automation.IValidateSetValuesGenerator {
             "VirtualEvent.Read.All"
             "VirtualEventRegistration-Anon.ReadWrite.All"
             "WindowsUpdates.ReadWrite.All"
+            "WorkforceIntegration.Read.All"
             "WorkforceIntegration.ReadWrite.All"
         )
         Return $PossibleScopes

@@ -26,6 +26,7 @@ try {
     foreach ($cmdlet in $cmdlets) {
         Write-Host "🔍 - Loading $cmdlet" -ForegroundColor Magenta;
         irm -Uri "$rootUrl/$cmdlet.ps1" | iex
+        # . ".\src\$cmdlet.ps1" -ErrorAction Stop
     }
 
     Write-Host "✅ - $ProductName is loaded`n" -ForegroundColor Green;
